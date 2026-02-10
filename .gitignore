@@ -32,4 +32,16 @@ build/
 ### VS Code ###
 .vscode/
 
-.env
+### Mac ###
+.DS_Store
+
+### Logs ###
+*.log
+
+### Database ###
+### *.db ###
+### *.sqlite ###
+
+### Application ###
+application-local.properties
+application-prod.properties
