@@ -86,4 +86,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+
+        // Solo excluir register y login del filtro JWT, NO to-do /api/auth
+        return path.equals("/api/auth/register") ||
+                path.equals("/api/auth/login") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/swagger-resources") ||
+                path.startsWith("/webjars") ||
+                path.startsWith("/h2-console") ||
+                path.startsWith("/ws");
+    }
 }

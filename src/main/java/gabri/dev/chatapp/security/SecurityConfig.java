@@ -41,18 +41,35 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configure(http))
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos
+                        // Endpoints públicos - SOLO register y login
                         .requestMatchers(
-                                "/api/auth/**",
+                                "/api/auth/register",
+                                "/api/auth/login",
+
+                                // Swagger/OpenAPI
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
+                                "/v3/api-docs",
                                 "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+
+                                // Documentación estática
+                                "/",
+                                "/index.html",
+                                "/java_doc/**",
+                                "/app_doc/**",
+                                "/assets/**",
+
+                                // H2 Console (solo desarrollo)
                                 "/h2-console/**",
-                                "/ws/**"  // WebSocket endpoint
+
+                                // WebSocket
+                                "/ws/**"
                         ).permitAll()
 
-                        // Endpoints que requieren autenticación
-                        .anyRequest().authenticated()
+                        // ⚠️ CAMBIO CRÍTICO: Todos los demás endpoints requieren autenticación
+                        .anyRequest().authenticated()  // ← CAMBIAR DE permitAll() a authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
