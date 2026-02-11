@@ -9,6 +9,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
   <script src="https://kit.fontawesome.com/2cb4495d2b.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --carrot-orange: #E06B2B;
@@ -19,6 +23,7 @@
       --cream: #FFF5E6;
       --soft-orange: #FFE4CC;
       --dark-bg: #2D1F1A;
+      --accent-yellow: #FFC857;
     }
 
     * {
@@ -28,39 +33,113 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, var(--cream) 0%, var(--soft-orange) 100%);
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Decorative Background Elements */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      right: -20%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(224, 107, 43, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -30%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(150, 185, 96, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: pulse 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
     }
 
     /* Header Styles */
     header {
       background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+      z-index: 10;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.3;
     }
 
     .navbar {
       background: transparent !important;
       padding: 1rem 0;
+      position: relative;
+      z-index: 2;
     }
 
     .navbar-brand {
       font-size: 2rem;
-      font-weight: bold;
+      font-weight: 800;
       color: white !important;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
       display: flex;
       align-items: center;
       gap: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      transform: scale(1.02);
     }
 
     .navbar-brand img {
       height: 50px;
       filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+      animation: gentle-bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes gentle-bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
     }
 
     .navbar-toggler {
       border-color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-toggler:hover {
+      transform: rotate(90deg);
     }
 
     .navbar-toggler-icon {
@@ -69,42 +148,109 @@
 
     #navbarHeader {
       background: var(--carrot-brown) !important;
+      backdrop-filter: blur(10px);
     }
 
     #navbarHeader h5, #navbarHeader h6 {
       color: var(--cream);
+      font-weight: 600;
     }
 
     #navbarHeader li {
       color: var(--soft-orange) !important;
+      padding: 0.25rem 0;
+      transition: transform 0.2s ease;
+    }
+
+    #navbarHeader li:hover {
+      transform: translateX(5px);
     }
 
     /* Main Section */
     main {
       padding: 4rem 0;
+      position: relative;
+      z-index: 1;
     }
 
     .hero-section {
       background: white;
       border-radius: 30px;
-      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
       padding: 3rem;
       margin: 2rem auto;
       max-width: 1200px;
+      position: relative;
+      overflow: hidden;
+      animation: fade-in-up 0.8s ease-out;
+    }
+
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(250, 161, 63, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
     }
 
     .hero-title {
       color: var(--carrot-orange);
-      font-size: 3rem;
-      font-weight: bold;
+      font-size: 3.5rem;
+      font-weight: 800;
       margin-bottom: 1rem;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+      position: relative;
+      animation: slide-in-left 0.8s ease-out;
+    }
+
+    @keyframes slide-in-left {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .hero-title i {
+      display: inline-block;
+      animation: rotate-carrot 3s ease-in-out infinite;
+    }
+
+    @keyframes rotate-carrot {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(-10deg);
+      }
+      75% {
+        transform: rotate(10deg);
+      }
     }
 
     .hero-subtitle {
       color: var(--carrot-brown);
       font-size: 1.3rem;
       margin-bottom: 2rem;
+      font-weight: 400;
+      animation: slide-in-left 0.8s ease-out 0.2s backwards;
     }
 
     .mascot-container {
@@ -112,6 +258,28 @@
       justify-content: center;
       align-items: center;
       padding: 2rem;
+      position: relative;
+    }
+
+    .mascot-container::before {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(224, 107, 43, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+      }
     }
 
     .mascot-container img {
@@ -119,10 +287,23 @@
       height: auto;
       filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
       transition: transform 0.3s ease;
+      position: relative;
+      z-index: 2;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+      50% {
+        transform: translateY(-15px) rotate(2deg);
+      }
     }
 
     .mascot-container img:hover {
-      transform: scale(1.05) rotate(2deg);
+      transform: scale(1.1) rotate(5deg) !important;
+      filter: drop-shadow(0 15px 40px rgba(224, 107, 43, 0.3));
     }
 
     /* Button Styles */
@@ -147,16 +328,52 @@
       align-items: center;
       gap: 1rem;
       font-weight: 600;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doc-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .doc-btn:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .doc-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(224, 107, 43, 0.4);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(224, 107, 43, 0.5);
       color: white;
+    }
+
+    .doc-btn:active {
+      transform: translateY(-2px) scale(0.98);
     }
 
     .doc-btn i {
       font-size: 1.5rem;
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .doc-btn:hover i {
+      transform: scale(1.2) rotate(5deg);
+    }
+
+    .doc-btn > div {
+      position: relative;
+      z-index: 1;
     }
 
     .doc-btn.spec {
@@ -165,16 +382,16 @@
     }
 
     .doc-btn.spec:hover {
-      box-shadow: 0 8px 25px rgba(81, 103, 45, 0.4);
+      box-shadow: 0 10px 30px rgba(81, 103, 45, 0.5);
     }
 
     .doc-btn.java {
-      background: linear-gradient(135deg, var(--carrot-brown) 0%, #9A6148  100%);
+      background: linear-gradient(135deg, var(--carrot-brown) 0%, #9A6148 100%);
       box-shadow: 0 5px 15px rgba(119, 72, 53, 0.3);
     }
 
     .doc-btn.java:hover {
-      box-shadow: 0 8px 25px rgba(119, 72, 53, 0.4);
+      box-shadow: 0 10px 30px rgba(119, 72, 53, 0.5);
     }
 
     /* Info Cards */
@@ -184,12 +401,38 @@
       padding: 2rem;
       color: white;
       margin-top: 3rem;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 25px rgba(81, 103, 45, 0.2);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(81, 103, 45, 0.3);
     }
 
     .info-card h3 {
       font-size: 1.5rem;
       margin-bottom: 1rem;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .info-card p {
+      position: relative;
+      line-height: 1.6;
     }
 
     /* Footer */
@@ -197,17 +440,33 @@
       background: var(--dark-bg);
       padding: 2rem 0;
       margin-top: 4rem;
+      position: relative;
+      z-index: 1;
     }
 
     footer img {
       filter: brightness(0) invert(1);
       opacity: 0.8;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    footer img:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    footer p {
+      transition: color 0.3s ease;
+    }
+
+    footer p:hover {
+      color: var(--carrot-light-orange) !important;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
       .hero-title {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
 
       .hero-subtitle {
@@ -222,20 +481,58 @@
       .hero-section {
         padding: 2rem 1.5rem;
       }
-    }
 
-    /* Animations */
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
+      .navbar-brand {
+        font-size: 1.5rem;
       }
-      50% {
-        transform: translateY(-10px);
+
+      .navbar-brand img {
+        height: 40px;
       }
     }
 
-    .float-animation {
-      animation: float 3s ease-in-out infinite;
+    /* Loading Animation */
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+
+    /* Smooth scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Selection color */
+    ::selection {
+      background-color: var(--carrot-light-orange);
+      color: white;
+    }
+
+    ::-moz-selection {
+      background-color: var(--carrot-light-orange);
+      color: white;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--cream);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--carrot-orange), var(--carrot-light-orange));
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--carrot-light-orange), var(--carrot-orange));
     }
   </style>
 </head>
@@ -246,12 +543,13 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-8 col-md-7 py-4">
-          <h5>Proyecto personal "Carrot Chat"</h5>
+          <h5><i class="fa-solid fa-comments"></i> Proyecto personal "Carrot Chat"</h5>
+          <p class="text-white-50 mt-2">Sistema de chat en tiempo real con WebSocket</p>
         </div>
         <div class="col-sm-4 offset-md-1 py-4">
-          <h6 class="text-white">Equipo de Desarrollo</h6>
-          <ul class="list-unstyled">
-            <li class="text-white">Gabriel Scipioni / Garbi-Collector</li>
+          <h6 class="text-white"><i class="fa-solid fa-users"></i> Equipo de Desarrollo</h6>
+          <ul class="list-unstyled mt-3">
+            <li class="text-white"><i class="fa-brands fa-github"></i> Gabriel Scipioni / Garbi-Collector</li>
           </ul>
         </div>
       </div>
@@ -260,7 +558,7 @@
   <div class="navbar navbar-dark shadow-sm">
     <div class="container">
       <a href="#" class="navbar-brand">
-        <img src="../img/carrotico.png" alt="Carrot Icon">
+        <img src="assets/img/carrotico.png" alt="Carrot Icon">
         <span>Carrot Documentation</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -276,7 +574,7 @@
       <div class="row align-items-center">
         <div class="col-lg-6">
           <h1 class="hero-title">
-            <i class="fa-solid fa-carrot" style="color: var(--carrot-orange);"></i>
+            <i class="fa-solid fa-carrot"></i>
             Carrot
           </h1>
           <p class="hero-subtitle">
@@ -288,7 +586,7 @@
               <i class="fa-solid fa-list-check"></i>
               <div>
                 <div>Especificación API</div>
-                <small style="opacity: 0.9; font-size: 0.85rem;">Endpoints y contratos</small>
+                <small style="opacity: 0.9; font-size: 0.85rem;">Endpoints y contratos REST</small>
               </div>
             </a>
 
@@ -296,7 +594,7 @@
               <i class="fa-solid fa-screwdriver-wrench"></i>
               <div>
                 <div>Documentación Técnica</div>
-                <small style="opacity: 0.9; font-size: 0.85rem;">Arquitectura y guías</small>
+                <small style="opacity: 0.9; font-size: 0.85rem;">Arquitectura y guías de desarrollo</small>
               </div>
             </a>
 
@@ -304,20 +602,20 @@
               <i class="fa-brands fa-java"></i>
               <div>
                 <div>JavaDoc</div>
-                <small style="opacity: 0.9; font-size: 0.85rem;">Documentación de clases</small>
+                <small style="opacity: 0.9; font-size: 0.85rem;">Documentación de clases y métodos</small>
               </div>
             </a>
           </div>
 
           <div class="info-card">
             <h3><i class="fa-solid fa-circle-info"></i> Acerca del Proyecto</h3>
-            <p>Aplicación desarrollada con Spring Boot para el backend de un hecho con websocket.</p>
+            <p>Aplicación desarrollada con <strong>Spring Boot</strong> para el backend de un sistema de chat en tiempo real utilizando <strong>WebSocket</strong>. Incluye API REST completa, manejo de sesiones y comunicación bidireccional.</p>
           </div>
         </div>
 
         <div class="col-lg-6">
           <div class="mascot-container">
-            <img src="../img/carrotpet.png" alt="Carrot Mascot" class="float-animation">
+            <img src="assets/img/carrotpet.png" alt="Carrot Mascot">
           </div>
         </div>
       </div>
@@ -327,9 +625,12 @@
 
 <footer>
   <div class="container text-center">
-    <img src="../img/carrotico.png" style="max-height: 50px;" alt="Carrot">
+    <img src="assets/img/carrotico.png" style="max-height: 50px;" alt="Carrot">
     <p class="text-white mt-3 mb-0" style="opacity: 0.7;">
-      Carrot - App Backend creada por Garbi-Collector
+      <i class="fa-solid fa-code"></i> Carrot - App Backend creada por Garbi-Collector
+    </p>
+    <p class="text-white mt-2 mb-0" style="opacity: 0.5; font-size: 0.85rem;">
+      Desarrollado con <i class="fa-solid fa-heart" style="color: var(--carrot-orange);"></i> usando Spring Boot
     </p>
   </div>
 </footer>
