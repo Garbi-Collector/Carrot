@@ -1,58 +1,267 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>TPI</title>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Documentación de la aplicación Carrot">
+  <title>Carrot - Documentación</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/2cb4495d2b.js" crossorigin="anonymous"></script>
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
+  <script src="https://kit.fontawesome.com/2cb4495d2b.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --carrot-orange: #E06B2B;
+      --carrot-light-orange: #FAA13F;
+      --carrot-brown: #774835;
+      --carrot-dark-green: #51672D;
+      --carrot-light-green: #96B960;
+      --cream: #FFF5E6;
+      --soft-orange: #FFE4CC;
+      --dark-bg: #2D1F1A;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--soft-orange) 100%);
+      min-height: 100vh;
+    }
+
+    /* Header Styles */
+    header {
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar {
+      background: transparent !important;
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      font-size: 2rem;
+      font-weight: bold;
+      color: white !important;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .navbar-brand img {
+      height: 50px;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .navbar-toggler {
+      border-color: white;
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    #navbarHeader {
+      background: var(--carrot-brown) !important;
+    }
+
+    #navbarHeader h5, #navbarHeader h6 {
+      color: var(--cream);
+    }
+
+    #navbarHeader li {
+      color: var(--soft-orange) !important;
+    }
+
+    /* Main Section */
+    main {
+      padding: 4rem 0;
+    }
+
+    .hero-section {
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+      padding: 3rem;
+      margin: 2rem auto;
+      max-width: 1200px;
+    }
+
+    .hero-title {
+      color: var(--carrot-orange);
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .hero-subtitle {
+      color: var(--carrot-brown);
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+    }
+
+    .mascot-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .mascot-container img {
+      max-width: 100%;
+      height: auto;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
+      transition: transform 0.3s ease;
+    }
+
+    .mascot-container img:hover {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    /* Button Styles */
+    .doc-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .doc-btn {
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%);
+      border: none;
+      color: white;
+      padding: 1.2rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(224, 107, 43, 0.3);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 600;
+    }
+
+    .doc-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(224, 107, 43, 0.4);
+      color: white;
+    }
+
+    .doc-btn i {
+      font-size: 1.5rem;
+    }
+
+    .doc-btn.spec {
+      background: linear-gradient(135deg, var(--carrot-dark-green) 0%, var(--carrot-light-green) 100%);
+      box-shadow: 0 5px 15px rgba(81, 103, 45, 0.3);
+    }
+
+    .doc-btn.spec:hover {
+      box-shadow: 0 8px 25px rgba(81, 103, 45, 0.4);
+    }
+
+    .doc-btn.java {
+      background: linear-gradient(135deg, var(--carrot-brown) 0%, #9A6148  100%);
+      box-shadow: 0 5px 15px rgba(119, 72, 53, 0.3);
+    }
+
+    .doc-btn.java:hover {
+      box-shadow: 0 8px 25px rgba(119, 72, 53, 0.4);
+    }
+
+    /* Info Cards */
+    .info-card {
+      background: linear-gradient(135deg, var(--carrot-light-green) 0%, var(--carrot-dark-green) 100%);
+      border-radius: 20px;
+      padding: 2rem;
+      color: white;
+      margin-top: 3rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-bg);
+      padding: 2rem 0;
+      margin-top: 4rem;
+    }
+
+    footer img {
+      filter: brightness(0) invert(1);
+      opacity: 0.8;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2rem;
       }
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
+      .hero-subtitle {
+        font-size: 1.1rem;
       }
-      body {
-        color: ghostwhite;
+
+      .doc-btn {
+        font-size: 1rem;
+        padding: 1rem 1.5rem;
       }
-      section {
-        background-color: #0071ce;
+
+      .hero-section {
+        padding: 2rem 1.5rem;
       }
-    </style>
-  </head>
-  <body>
-    
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+
 <header>
-  <div class="collapse bg-dark" id="navbarHeader">
+  <div class="collapse" id="navbarHeader">
     <div class="container">
       <div class="row">
         <div class="col-sm-8 col-md-7 py-4">
           <h5>Caso de estudio "Villa del Condor"</h5>
         </div>
         <div class="col-sm-4 offset-md-1 py-4">
-          <h6 class="text-white">dummy</h6> <!-- TODO: Cambiar numero de grupo y modulo-->
+          <h6 class="text-white">Equipo de Desarrollo</h6>
           <ul class="list-unstyled">
-            <li class="text-white">Gabriel Scipioni</li> <!-- TODO: Agregar integrantes-->
+            <li class="text-white">Gabriel Scipioni</li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-  <div class="navbar navbar-dark bg-dark shadow-sm">
+  <div class="navbar navbar-dark shadow-sm">
     <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <h3>Trabajo dummy</h3>
+      <a href="#" class="navbar-brand">
+        <img src="img/carrotico.png" alt="Carrot Icon">
+        <span>Carrot Documentation</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -62,46 +271,72 @@
 </header>
 
 <main>
+  <div class="container">
+    <div class="hero-section">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="hero-title">
+            <i class="fa-solid fa-carrot" style="color: var(--carrot-orange);"></i>
+            Carrot
+          </h1>
+          <p class="hero-subtitle">
+            Documentación completa de la aplicación Spring Boot
+          </p>
 
-  <section class="py-5 mb-5 text-center container-fluid">
-    <div class="row">
-      <div class="col-sm-6 ">
-      </div>
-      <div class="col-sm-6">
+          <div class="doc-buttons">
+            <a href="./api_doc" class="doc-btn spec">
+              <i class="fa-solid fa-list-check"></i>
+              <div>
+                <div>Especificación API</div>
+                <small style="opacity: 0.9; font-size: 0.85rem;">Endpoints y contratos</small>
+              </div>
+            </a>
+
+            <a href="./app_doc" class="doc-btn">
+              <i class="fa-solid fa-screwdriver-wrench"></i>
+              <div>
+                <div>Documentación Técnica</div>
+                <small style="opacity: 0.9; font-size: 0.85rem;">Arquitectura y guías</small>
+              </div>
+            </a>
+
+            <a href="./java_doc/apidocs" class="doc-btn java">
+              <i class="fa-brands fa-java"></i>
+              <div>
+                <div>JavaDoc</div>
+                <small style="opacity: 0.9; font-size: 0.85rem;">Documentación de clases</small>
+              </div>
+            </a>
+          </div>
+
+          <div class="info-card">
+            <h3><i class="fa-solid fa-circle-info"></i> Acerca del Proyecto</h3>
+            <p>Aplicación desarrollada con Spring Boot para la gestión de Villa del Condor. Incluye API RESTful, documentación completa y JavaDoc generado automáticamente.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="mascot-container">
+            <img src="img/carrotpet.png" alt="Carrot Mascot" class="float-animation">
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row pb-5 mb-5">
-      <div class="col-sm-6">
-        <h1 class="fw-light">Recursos del Proyecto</h1>
-        <h1 class="lead">Documentación de la aplicación y otros recursos</h1>
-        <p>
-          <a href="./api_doc" class="btn btn-primary" style="background-color: lightslategrey"> <i
-            class="fa-solid fa-list-check"></i> Spec </a>
-          <a href="./app_doc" class="btn btn-primary" style="background-color: lightslategrey"> <i
-            class="fa-solid fa-screwdriver-wrench "></i> Doc </a>
-          <a href="./java_doc/apidocs" class="btn btn-primary" style="background-color: lightslategrey"> <i
-            class="fa-brands fa-java"></i> Java Doc </a>
-        </p>
-      </div>
-      <div class="col-sm-6">
-        <img src="assets/images/Tup_completo_negro_transparente.png" alt="logo" style="max-width: 60%;">
-      </div>
-    </div>
-  </section>
-
+  </div>
 </main>
 
-<footer class="py-5">
-  <div class="container">
+<footer>
+  <div class="container text-center">
     <img src="assets/images/UTN-FRC_logo.png" style="max-height: 50px;" alt="UTN FRC">
+    <p class="text-white mt-3 mb-0" style="opacity: 0.7;">
+      Universidad Tecnológica Nacional - Facultad Regional Córdoba
+    </p>
   </div>
 </footer>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-crossorigin="anonymous"></script>
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
 
-      
-  </body>
+</body>
 </html>
