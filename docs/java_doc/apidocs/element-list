@@ -4,4 +4,8 @@ gabri.dev.chatapp.controllers
 gabri.dev.chatapp.dtos
 gabri.dev.chatapp.dtos.common
 gabri.dev.chatapp.entities
-gabri.dev.chatapp.models
+gabri.dev.chatapp.exceptions
+gabri.dev.chatapp.repositories
+gabri.dev.chatapp.security
+gabri.dev.chatapp.services
+gabri.dev.chatapp.websocket
