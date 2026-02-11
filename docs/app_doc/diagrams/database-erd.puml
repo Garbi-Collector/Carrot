@@ -1,0 +1,109 @@
+@startuml
+
+' Configuración para estilo ERD
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define primary_key(x) <b>PK: x</b>
+!define foreign_key(x) <color:red>FK: x</color>
+!define unique(x) <color:green>U: x</color>
+
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+' Tabla Users
+entity "users" as users {
+    primary_key(id: BIGINT)
+    --
+    unique(username: VARCHAR(50))
+    unique(email: VARCHAR(100))
+    password: VARCHAR(255)
+    full_name: VARCHAR(100)
+    avatar_url: VARCHAR(500)
+    status: VARCHAR(20)
+    enabled: BOOLEAN
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+    last_seen_at: TIMESTAMP
+}
+
+' Tabla Messages
+entity "messages" as messages {
+    primary_key(id: BIGINT)
+    --
+    foreign_key(sender_id: BIGINT)
+    foreign_key(chat_room_id: BIGINT)
+    content: TEXT
+    type: VARCHAR(20)
+    sent_at: TIMESTAMP
+    edited_at: TIMESTAMP
+    is_edited: BOOLEAN
+}
+
+' Tabla ChatRooms
+entity "chat_rooms" as chatrooms {
+    primary_key(id: BIGINT)
+    --
+    foreign_key(created_by_user_id: BIGINT)
+    unique(name: VARCHAR(100))
+    type: VARCHAR(20)
+    description: VARCHAR(500)
+    image_url: VARCHAR(500)
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+}
+
+' Tabla intermedia para Many-to-Many
+entity "chat_room_participants" as participants {
+    foreign_key(chat_room_id: BIGINT)
+    foreign_key(user_id: BIGINT)
+}
+
+' Relaciones
+users ||--o{ messages : "1:N\nsender_id"
+chatrooms ||--o{ messages : "1:N\nchat_room_id"
+users ||--o{ chatrooms : "1:N\ncreated_by"
+users }o--o{ participants : "N:M"
+chatrooms }o--o{ participants : "N:M"
+
+note right of users
+  **Indices:**
+  - username (UNIQUE)
+  - email (UNIQUE)
+  
+  **Default values:**
+  - status = 'OFFLINE'
+  - enabled = true
+end note
+
+note right of messages
+  **Indices:**
+  - sender_id (FK)
+  - chat_room_id (FK)
+  - sent_at (para ordenamiento)
+  
+  **Default values:**
+  - type = 'CHAT'
+  - is_edited = false
+end note
+
+note right of chatrooms
+  **Indices:**
+  - name (UNIQUE)
+  - created_by_user_id (FK)
+  
+  **Default values:**
+  - type = 'PRIVATE'
+end note
+
+note bottom of participants
+  **Primary Key Compuesto:**
+  (chat_room_id, user_id)
+  
+  **Indices:**
+  - chat_room_id (FK)
+  - user_id (FK)
+end note
+
+@enduml

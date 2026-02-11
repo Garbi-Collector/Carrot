@@ -1,0 +1,93 @@
+@startuml
+
+' Configuración de estilo
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor LightBlue
+    BorderColor DarkBlue
+    ArrowColor Black
+}
+
+' Entidad User
+class User {
+    + id: Long <<PK>>
+    --
+    + username: String <<unique>>
+    + email: String <<unique>>
+    + password: String
+    + fullName: String
+    + avatarUrl: String
+    + status: UserStatus
+    + enabled: Boolean
+    + createdAt: LocalDateTime
+    + updatedAt: LocalDateTime
+    + lastSeenAt: LocalDateTime
+    --
+    + sentMessages: Set<Message>
+    + chatRooms: Set<ChatRoom>
+}
+
+' Entidad Message
+class Message {
+    + id: Long <<PK>>
+    --
+    + content: String <<TEXT>>
+    + type: MessageType
+    + sentAt: LocalDateTime
+    + editedAt: LocalDateTime
+    + isEdited: Boolean
+    --
+    + sender: User <<FK>>
+    + chatRoom: ChatRoom <<FK>>
+}
+
+' Entidad ChatRoom
+class ChatRoom {
+    + id: Long <<PK>>
+    --
+    + name: String <<unique>>
+    + type: ChatRoomType
+    + description: String
+    + imageUrl: String
+    + createdAt: LocalDateTime
+    + updatedAt: LocalDateTime
+    --
+    + participants: Set<User>
+    + messages: Set<Message>
+    + createdBy: User <<FK>>
+}
+
+' Enumeraciones
+enum UserStatus {
+    ONLINE
+    OFFLINE
+    AWAY
+    BUSY
+}
+
+enum MessageType {
+    CHAT
+    JOIN
+    LEAVE
+    SYSTEM
+    FILE
+    IMAGE
+}
+
+enum ChatRoomType {
+    PRIVATE
+    GROUP
+}
+
+' Relaciones
+User "1" -- "0..*" Message : sender >
+User "0..*" -- "0..*" ChatRoom : participants
+ChatRoom "1" -- "0..*" Message : contains >
+ChatRoom "0..1" -- "1" User : createdBy >
+
+' Uso de enumeraciones
+User --> UserStatus
+Message --> MessageType
+ChatRoom --> ChatRoomType
+
+@enduml

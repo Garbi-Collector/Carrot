@@ -1,0 +1,59 @@
+@startuml
+
+' Definición de estilo
+skinparam component {
+    BackgroundColor<<Entity>> LightBlue
+    BorderColor<<Entity>> DarkBlue
+}
+
+' Componentes de Entidades
+package "Entities Layer" {
+    [User] <<Entity>>
+    [Message] <<Entity>>
+    [ChatRoom] <<Entity>>
+}
+
+' Relaciones entre entidades
+User "1" -- "0..*" Message : sender >
+User "0..*" -- "0..*" ChatRoom : participants
+ChatRoom "1" -- "0..*" Message : contains >
+ChatRoom "0..1" -- "1" User : createdBy >
+
+' Enumeraciones
+package "Enums" {
+    [UserStatus] <<enum>>
+    [MessageType] <<enum>>
+    [ChatRoomType] <<enum>>
+}
+
+User ..> UserStatus : uses
+Message ..> MessageType : uses
+ChatRoom ..> ChatRoomType : uses
+
+' Notas explicativas
+note right of User
+  **Atributos principales:**
+  - username (unique)
+  - email (unique)
+  - password (encrypted)
+  - status (UserStatus)
+  - avatarUrl
+end note
+
+note right of Message
+  **Atributos principales:**
+  - content (TEXT)
+  - type (MessageType)
+  - sentAt (timestamp)
+  - isEdited (boolean)
+end note
+
+note right of ChatRoom
+  **Atributos principales:**
+  - name (unique)
+  - type (ChatRoomType)
+  - description
+  - imageUrl
+end note
+
+@enduml

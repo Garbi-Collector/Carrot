@@ -1,0 +1,68 @@
+@startuml
+
+title Data Flow - Entity Interactions
+
+skinparam activity {
+    BackgroundColor LightBlue
+    BorderColor DarkBlue
+    ArrowColor Black
+}
+
+' Actores
+actor "Usuario 1" as user1
+actor "Usuario 2" as user2
+
+' Sistema
+database "Database" as db {
+    storage "users" as users_table
+    storage "chat_rooms" as rooms_table
+    storage "messages" as messages_table
+    storage "chat_room_participants" as participants_table
+}
+
+' Escenario 1: Crear sala privada
+group Crear Sala Privada [PRIVATE]
+    user1 -> users_table : 1. Authenticate
+    user1 -> rooms_table : 2. Create ChatRoom\n(type=PRIVATE)
+    rooms_table -> participants_table : 3. Add user1
+    user2 -> users_table : 4. Authenticate
+    rooms_table -> participants_table : 5. Add user2
+    note right
+        **Regla:** Salas PRIVATE
+        deben tener exactamente
+        2 participantes
+    end note
+end
+
+' Escenario 2: Enviar mensaje
+group Enviar Mensaje
+    user1 -> users_table : 6. Authenticate
+    user1 -> messages_table : 7. Create Message\n(sender=user1,\nchatRoom=room,\ntype=CHAT)
+    messages_table --> rooms_table : 8. Associate with ChatRoom
+    messages_table --> users_table : 9. Associate with User
+    user2 <-- messages_table : 10. Notify (WebSocket)
+end
+
+' Escenario 3: Crear sala grupal
+group Crear Sala Grupal [GROUP]
+    user1 -> users_table : 11. Authenticate
+    user1 -> rooms_table : 12. Create ChatRoom\n(type=GROUP,\ncreatedBy=user1)
+    rooms_table -> participants_table : 13. Add user1 (creator)
+    user1 -> participants_table : 14. Invite user2
+    participants_table -> rooms_table : 15. Add participant
+    rooms_table -> messages_table : 16. Create JOIN message\n(type=JOIN)
+    note right
+        **Regla:** Salas GROUP
+        deben tener 3+ participantes
+        y tienen un creador
+    end note
+end
+
+' Escenario 4: Actualizar estado del usuario
+group Actualizar Estado
+    user1 -> users_table : 17. Update status\n(ONLINE → AWAY)
+    users_table -> users_table : 18. Update lastSeenAt
+    users_table --> user2 : 19. Broadcast status\n(WebSocket)
+end
+
+@enduml
