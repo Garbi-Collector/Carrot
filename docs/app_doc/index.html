@@ -1,34 +1,527 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Carrot - Documentación Técnica</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Description">
+  <meta name="description" content="Documentación técnica de la aplicación Carrot">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="icon" href="../assets/img/carrotico.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/2cb4495d2b.js" crossorigin="anonymous"></script>
+
+  <!-- Base Docsify theme -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+
+  <!-- Custom Carrot Theme -->
+  <style>
+    :root {
+      --carrot-orange: #E06B2B;
+      --carrot-light-orange: #FAA13F;
+      --carrot-brown: #774835;
+      --carrot-dark-green: #51672D;
+      --carrot-light-green: #96B960;
+      --cream: #FFF5E6;
+      --soft-orange: #FFE4CC;
+      --dark-bg: #2D1F1A;
+
+      /* Docsify theme overrides */
+      --theme-color: var(--carrot-orange);
+      --theme-color-secondary: var(--carrot-light-orange);
+    }
+
+    /* Global Styles */
+    * {
+      font-family: 'Poppins', 'Segoe UI', sans-serif !important;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--cream) 0%, var(--soft-orange) 100%) !important;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: white !important;
+      border-right: 3px solid var(--carrot-orange) !important;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .sidebar-nav {
+      padding: 1rem !important;
+    }
+
+    /* Logo customization */
+    .app-name {
+      margin: 1.5rem 0 !important;
+      padding: 1rem !important;
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%) !important;
+      border-radius: 15px !important;
+      box-shadow: 0 5px 15px rgba(224, 107, 43, 0.3) !important;
+    }
+
+    .app-name-link {
+      display: flex !important;
+      align-items: center !important;
+      gap: 1rem !important;
+      color: white !important;
+      font-weight: 800 !important;
+      font-size: 1.5rem !important;
+      text-decoration: none !important;
+      padding: 0.5rem !important;
+    }
+
+    .app-name img {
+      height: 50px !important;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2)) !important;
+    }
+
+    /* Sidebar navigation items */
+    .sidebar-nav ul {
+      padding: 0 !important;
+    }
+
+    .sidebar-nav li {
+      margin: 0.5rem 0 !important;
+    }
+
+    .sidebar-nav a {
+      color: var(--carrot-brown) !important;
+      border-radius: 8px !important;
+      padding: 0.6rem 1rem !important;
+      transition: all 0.3s ease !important;
+      font-weight: 600 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    .sidebar-nav a:hover {
+      background: var(--soft-orange) !important;
+      color: var(--carrot-orange) !important;
+      transform: translateX(5px) !important;
+      text-decoration: none !important;
+    }
+
+    .sidebar-nav a.active {
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%) !important;
+      color: white !important;
+      box-shadow: 0 3px 10px rgba(224, 107, 43, 0.3) !important;
+    }
+
+    /* Sidebar strong (section titles) */
+    .sidebar-nav strong {
+      color: var(--carrot-dark-green) !important;
+      font-size: 0.9rem !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1px !important;
+      margin-top: 1.5rem !important;
+      display: block !important;
+      padding: 0.5rem 1rem !important;
+      border-bottom: 2px solid var(--carrot-light-green) !important;
+    }
+
+    /* Main content */
+    .content {
+      padding-top: 0 !important;
+    }
+
+    .markdown-section {
+      max-width: 900px !important;
+      margin: 0 auto !important;
+      padding: 2rem !important;
+      background: white !important;
+      border-radius: 20px !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+      margin-bottom: 2rem !important;
+    }
+
+    /* Headings */
+    .markdown-section h1 {
+      color: var(--carrot-orange) !important;
+      border-bottom: 3px solid var(--carrot-light-orange) !important;
+      padding-bottom: 1rem !important;
+      font-weight: 800 !important;
+      font-size: 2.5rem !important;
+    }
+
+    .markdown-section h1 span {
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+
+    .markdown-section h2 {
+      color: var(--carrot-dark-green) !important;
+      border-left: 5px solid var(--carrot-light-green) !important;
+      padding-left: 1rem !important;
+      font-weight: 700 !important;
+      margin-top: 2rem !important;
+    }
+
+    .markdown-section h3 {
+      color: var(--carrot-brown) !important;
+      font-weight: 700 !important;
+    }
+
+    /* Links */
+    .markdown-section a {
+      color: var(--carrot-orange) !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
+      border-bottom: 2px solid transparent !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .markdown-section a:hover {
+      color: var(--carrot-light-orange) !important;
+      border-bottom: 2px solid var(--carrot-light-orange) !important;
+    }
+
+    /* Code blocks */
+    .markdown-section pre {
+      background: var(--dark-bg) !important;
+      border-radius: 10px !important;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+      border-left: 4px solid var(--carrot-orange) !important;
+    }
+
+    .markdown-section code {
+      color: var(--carrot-orange) !important;
+      background: var(--soft-orange) !important;
+      padding: 0.2rem 0.5rem !important;
+      border-radius: 5px !important;
+      font-weight: 600 !important;
+    }
+
+    .markdown-section pre code {
+      color: #f8f8f2 !important;
+      background: transparent !important;
+      padding: 0 !important;
+    }
+
+    /* Lists */
+    .markdown-section ul,
+    .markdown-section ol {
+      padding-left: 2rem !important;
+    }
+
+    .markdown-section li {
+      margin: 0.5rem 0 !important;
+      color: var(--carrot-brown) !important;
+    }
+
+    .markdown-section li::marker {
+      color: var(--carrot-orange) !important;
+      font-weight: bold !important;
+    }
+
+    /* Blockquotes */
+    .markdown-section blockquote {
+      background: linear-gradient(135deg, var(--carrot-light-green) 0%, var(--carrot-dark-green) 100%) !important;
+      color: white !important;
+      border-left: 5px solid var(--carrot-orange) !important;
+      border-radius: 10px !important;
+      padding: 1.5rem !important;
+      margin: 1.5rem 0 !important;
+      box-shadow: 0 5px 15px rgba(81, 103, 45, 0.2) !important;
+    }
+
+    .markdown-section blockquote p {
+      color: white !important;
+      margin: 0 !important;
+    }
+
+    /* Tables */
+    .markdown-section table {
+      border-collapse: collapse !important;
+      width: 100% !important;
+      margin: 1.5rem 0 !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .markdown-section table thead {
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%) !important;
+    }
+
+    .markdown-section table th {
+      color: white !important;
+      padding: 1rem !important;
+      font-weight: 700 !important;
+      text-align: left !important;
+    }
+
+    .markdown-section table td {
+      padding: 0.8rem 1rem !important;
+      border-bottom: 1px solid #e8e8e8 !important;
+    }
+
+    .markdown-section table tr:hover {
+      background: var(--soft-orange) !important;
+    }
+
+    /* Search */
+    .search {
+      padding: 1rem !important;
+      border-bottom: 2px solid var(--soft-orange) !important;
+    }
+
+    .search input {
+      border: 2px solid var(--carrot-orange) !important;
+      border-radius: 10px !important;
+      padding: 0.8rem !important;
+      font-size: 1rem !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .search input:focus {
+      outline: none !important;
+      border-color: var(--carrot-light-orange) !important;
+      box-shadow: 0 0 0 3px rgba(224, 107, 43, 0.2) !important;
+    }
+
+    .search .results-panel {
+      border: 2px solid var(--carrot-orange) !important;
+      border-radius: 10px !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .search .matching-post {
+      border-bottom: 1px solid var(--soft-orange) !important;
+      padding: 1rem !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .search .matching-post:hover {
+      background: var(--soft-orange) !important;
+    }
+
+    /* Cover page (if enabled) */
+    section.cover {
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%) !important;
+    }
+
+    section.cover h1 {
+      color: white !important;
+      font-weight: 800 !important;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Custom badges */
+    .markdown-section .badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin: 0 0.25rem;
+    }
+
+    .markdown-section .badge-primary {
+      background: var(--carrot-orange);
+      color: white;
+    }
+
+    .markdown-section .badge-success {
+      background: var(--carrot-light-green);
+      color: white;
+    }
+
+    .markdown-section .badge-info {
+      background: var(--carrot-light-orange);
+      color: white;
+    }
+
+    /* PlantUML diagrams styling */
+    .markdown-section svg {
+      max-width: 100% !important;
+      height: auto !important;
+      border-radius: 10px !important;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1) !important;
+      background: white !important;
+      padding: 1rem !important;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--cream);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--carrot-orange), var(--carrot-light-orange));
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--carrot-light-orange), var(--carrot-orange));
+    }
+
+    /* Selection */
+    ::selection {
+      background-color: var(--carrot-light-orange);
+      color: white;
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%) !important;
+      box-shadow: 0 5px 15px rgba(224, 107, 43, 0.3) !important;
+    }
+
+    .back-to-top:hover {
+      box-shadow: 0 8px 25px rgba(224, 107, 43, 0.5) !important;
+    }
+
+    /* Custom header bar */
+    .custom-header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 300px;
+      height: 60px;
+      background: white;
+      border-bottom: 3px solid var(--carrot-orange);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+    }
+
+    .custom-header-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--carrot-orange);
+    }
+
+    .custom-header-nav a {
+      color: var(--carrot-brown);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .custom-header-nav a:hover {
+      color: var(--carrot-orange);
+    }
+
+    .content {
+      padding-top: 80px !important;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 768px) {
+      .custom-header {
+        left: 0;
+        padding: 0 1rem;
+      }
+
+      .custom-header-title {
+        font-size: 1rem;
+      }
+
+      .custom-header-nav {
+        display: none;
+      }
+
+      .markdown-section {
+        padding: 1rem !important;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
-  <script>
-    window.$docsify = {
-      plantuml: {
-        skin: 'classic',
-        renderSvgAsObject: true,
-      },
-      relativePath: true,
-      loadSidebar: true,
-      subMaxLevel: 3,
-      alias: { '/.*/_sidebar.md': '/_sidebar.md' },
-      search: 'auto',
-      logo: './_media/logo.png',
-      name: 'Project Name',
-      repo: 'https://github.com/LCIV-2023/tpi-scaffolding'
-    }
-  </script>
-  <!-- Docsify v4 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <script src="//unpkg.com/docsify-puml/dist/docsify-puml.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+<!-- Custom Header -->
+<div class="custom-header">
+  <div class="custom-header-title">
+    <i class="fa-solid fa-book"></i> Documentación Técnica
+  </div>
+  <div class="custom-header-nav">
+    <a href="../index.html">
+      <i class="fa-solid fa-home"></i> Inicio
+    </a>
+    <a href="../api_doc/index.html">
+      <i class="fa-solid fa-code"></i> API Spec
+    </a>
+    <a href="../java_doc/apidocs/index.html">
+      <i class="fa-brands fa-java"></i> JavaDoc
+    </a>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<script>
+  window.$docsify = {
+    plantuml: {
+      skin: 'classic',
+      renderSvgAsObject: true,
+    },
+    relativePath: true,
+    loadSidebar: true,
+    subMaxLevel: 3,
+    alias: { '/.*/_sidebar.md': '/_sidebar.md' },
+    search: {
+      placeholder: 'Buscar en la documentación...',
+      noData: 'No se encontraron resultados',
+      depth: 6
+    },
+    logo: '../assets/img/carrotico.png',
+    name: '<i class="fa-solid fa-carrot"></i> Carrot Docs',
+    repo: 'https://github.com/Garbi-Collector',
+    coverpage: false,
+    onlyCover: false,
+    loadNavbar: false,
+    mergeNavbar: true,
+    formatUpdated: '{MM}/{DD} {HH}:{mm}',
+
+    // Custom plugins
+    plugins: [
+      function(hook, vm) {
+        hook.beforeEach(function(html) {
+          // Add custom badges or modifications to content here if needed
+          return html;
+        });
+
+        hook.afterEach(function(html, next) {
+          // Add footer to each page
+          const footer = `
+              <hr style="margin-top: 3rem; border: none; border-top: 2px solid var(--carrot-orange);">
+              <footer style="text-align: center; padding: 2rem 0; color: var(--carrot-brown);">
+                <p style="margin: 0;">
+                  <i class="fa-solid fa-code"></i> Desarrollado con
+                  <i class="fa-solid fa-heart" style="color: var(--carrot-orange);"></i>
+                  por Garbi-Collector
+                </p>
+                <p style="margin: 0.5rem 0 0 0; opacity: 0.7; font-size: 0.9rem;">
+                  Carrot Chat - Sistema de mensajería WebSocket
+                </p>
+              </footer>
+            `;
+          next(html + footer);
+        });
+      }
+    ]
+  }
+</script>
+
+<!-- Docsify v4 -->
+<script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+<script src="//unpkg.com/docsify-puml/dist/docsify-puml.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 </body>
 </html>

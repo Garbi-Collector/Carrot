@@ -1,17 +1,403 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <!-- Load the latest Swagger UI code and style from npm using unpkg.com -->
-    <script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css"/>
-    <title>PS Admin - Api Specs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrot API - Especificación</title>
+
+    <!-- Load Swagger UI -->
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css"/>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/2cb4495d2b.js" crossorigin="anonymous"></script>
+
+    <style>
+        :root {
+            --carrot-orange: #E06B2B;
+            --carrot-light-orange: #FAA13F;
+            --carrot-brown: #774835;
+            --carrot-dark-green: #51672D;
+            --carrot-light-green: #96B960;
+            --cream: #FFF5E6;
+            --soft-orange: #FFE4CC;
+            --dark-bg: #2D1F1A;
+        }
+
+        * {
+            font-family: 'Poppins', 'Segoe UI', sans-serif !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--soft-orange) 100%);
+        }
+
+        /* Custom Header */
+        .custom-header {
+            background: linear-gradient(135deg, var(--carrot-orange) 0%, var(--carrot-light-orange) 100%);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .custom-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .custom-header img {
+            height: 45px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .custom-header h1 {
+            color: white;
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-header-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: white;
+            color: var(--carrot-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Swagger UI Container */
+        #swagger-ui {
+            max-width: 1400px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        /* Customize Swagger UI Colors */
+        .swagger-ui .topbar {
+            display: none !important; /* Hide default topbar */
+        }
+
+        /* Info section */
+        .swagger-ui .info {
+            margin: 2rem 0 !important;
+        }
+
+        .swagger-ui .info .title {
+            color: var(--carrot-orange) !important;
+            font-size: 2.5rem !important;
+            font-weight: 800 !important;
+        }
+
+        .swagger-ui .info .description {
+            color: var(--carrot-brown) !important;
+        }
+
+        /* Scheme container */
+        .swagger-ui .scheme-container {
+            background: linear-gradient(135deg, var(--carrot-light-green) 0%, var(--carrot-dark-green) 100%) !important;
+            border-radius: 10px !important;
+            padding: 1rem !important;
+            box-shadow: none !important;
+        }
+
+        /* Operations */
+        .swagger-ui .opblock-tag {
+            border-bottom: 3px solid var(--carrot-orange) !important;
+            padding: 1rem 0 !important;
+        }
+
+        .swagger-ui .opblock-tag:hover {
+            background: var(--soft-orange) !important;
+        }
+
+        .swagger-ui .opblock {
+            border: 2px solid #e8e8e8 !important;
+            border-radius: 10px !important;
+            margin: 1rem 0 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        /* HTTP Methods Colors */
+        .swagger-ui .opblock.opblock-get {
+            border-color: var(--carrot-light-green) !important;
+            background: rgba(150, 185, 96, 0.05) !important;
+        }
+
+        .swagger-ui .opblock.opblock-get .opblock-summary-method {
+            background: var(--carrot-light-green) !important;
+        }
+
+        .swagger-ui .opblock.opblock-post {
+            border-color: var(--carrot-orange) !important;
+            background: rgba(224, 107, 43, 0.05) !important;
+        }
+
+        .swagger-ui .opblock.opblock-post .opblock-summary-method {
+            background: var(--carrot-orange) !important;
+        }
+
+        .swagger-ui .opblock.opblock-put {
+            border-color: var(--carrot-light-orange) !important;
+            background: rgba(250, 161, 63, 0.05) !important;
+        }
+
+        .swagger-ui .opblock.opblock-put .opblock-summary-method {
+            background: var(--carrot-light-orange) !important;
+        }
+
+        .swagger-ui .opblock.opblock-delete {
+            border-color: var(--carrot-brown) !important;
+            background: rgba(119, 72, 53, 0.05) !important;
+        }
+
+        .swagger-ui .opblock.opblock-delete .opblock-summary-method {
+            background: var(--carrot-brown) !important;
+        }
+
+        .swagger-ui .opblock.opblock-patch {
+            border-color: var(--carrot-dark-green) !important;
+            background: rgba(81, 103, 45, 0.05) !important;
+        }
+
+        .swagger-ui .opblock.opblock-patch .opblock-summary-method {
+            background: var(--carrot-dark-green) !important;
+        }
+
+        /* Buttons */
+        .swagger-ui .btn {
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .swagger-ui .btn.execute {
+            background: var(--carrot-orange) !important;
+            border-color: var(--carrot-orange) !important;
+        }
+
+        .swagger-ui .btn.execute:hover {
+            background: var(--carrot-light-orange) !important;
+            border-color: var(--carrot-light-orange) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(224, 107, 43, 0.3) !important;
+        }
+
+        .swagger-ui .btn.authorize {
+            background: var(--carrot-dark-green) !important;
+            border-color: var(--carrot-dark-green) !important;
+        }
+
+        .swagger-ui .btn.authorize:hover {
+            background: var(--carrot-light-green) !important;
+            border-color: var(--carrot-light-green) !important;
+        }
+
+        /* Authorization button */
+        .swagger-ui .auth-wrapper .authorize {
+            background: var(--carrot-dark-green) !important;
+            border-color: var(--carrot-dark-green) !important;
+        }
+
+        /* Models section */
+        .swagger-ui .model-box {
+            background: var(--soft-orange) !important;
+            border-radius: 8px !important;
+        }
+
+        .swagger-ui .model-title {
+            color: var(--carrot-orange) !important;
+            font-weight: 700 !important;
+        }
+
+        /* Response section */
+        .swagger-ui .responses-inner h4,
+        .swagger-ui .responses-inner h5 {
+            color: var(--carrot-brown) !important;
+        }
+
+        /* Tab */
+        .swagger-ui .tab li {
+            color: var(--carrot-brown) !important;
+        }
+
+        .swagger-ui .tab li.active {
+            background: var(--carrot-orange) !important;
+            color: white !important;
+        }
+
+        /* Links */
+        .swagger-ui a {
+            color: var(--carrot-orange) !important;
+        }
+
+        .swagger-ui a:hover {
+            color: var(--carrot-light-orange) !important;
+        }
+
+        /* Parameter name */
+        .swagger-ui .parameter__name {
+            color: var(--carrot-orange) !important;
+            font-weight: 600 !important;
+        }
+
+        /* Response codes */
+        .swagger-ui .response-col_status {
+            color: var(--carrot-dark-green) !important;
+            font-weight: 700 !important;
+        }
+
+        /* Try it out button */
+        .swagger-ui .try-out__btn {
+            background: var(--carrot-light-green) !important;
+            border-color: var(--carrot-light-green) !important;
+            color: white !important;
+        }
+
+        /* Loading animation */
+        .swagger-ui .loading-container .loading:after {
+            border-color: var(--carrot-orange) transparent transparent !important;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--carrot-orange), var(--carrot-light-orange));
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--carrot-light-orange), var(--carrot-orange));
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .custom-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .custom-header h1 {
+                font-size: 1.4rem;
+            }
+
+            #swagger-ui {
+                margin: 1rem;
+                padding: 1rem;
+                border-radius: 15px;
+            }
+
+            .back-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Selection color */
+        ::selection {
+            background-color: var(--carrot-light-orange);
+            color: white;
+        }
+
+        /* Info box at the top */
+        .info-box {
+            background: linear-gradient(135deg, var(--carrot-light-green) 0%, var(--carrot-dark-green) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(81, 103, 45, 0.2);
+        }
+
+        .info-box h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .info-box p {
+            margin: 0;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
-<div id="swagger-ui"></div> <!-- Div to hold the UI component -->
+<!-- Custom Header -->
+<div class="custom-header">
+    <div class="custom-header-left">
+        <img src="../../img/carrotico.png" alt="Carrot">
+        <div>
+            <h1><i class="fa-solid fa-code"></i> Carrot API</h1>
+            <div class="custom-header-subtitle">Especificación OpenAPI / Swagger</div>
+        </div>
+    </div>
+    <a href="../index.html" class="back-button">
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver a Docs
+    </a>
+</div>
+
+<!-- Swagger UI Container -->
+<div id="swagger-ui">
+    <div class="info-box">
+        <h3><i class="fa-solid fa-circle-info"></i> Documentación de la API REST</h3>
+        <p>
+            Esta es la especificación completa de todos los endpoints disponibles en la API de Carrot.
+            Puedes explorar los endpoints, ver los esquemas de datos y probar las peticiones directamente desde aquí.
+        </p>
+    </div>
+</div>
+
 <script>
     window.onload = function () {
         // Begin Swagger UI call region
         const ui = SwaggerUIBundle({
-            url: "swagger.json", //Location of Open API spec in the repo
+            url: "swagger.json",
             dom_id: '#swagger-ui',
             deepLinking: true,
             presets: [
@@ -21,8 +407,18 @@
             plugins: [
                 SwaggerUIBundle.plugins.DownloadUrl
             ],
-        })
-        window.ui = ui
+            layout: "BaseLayout",
+            docExpansion: "list", // 'list', 'full', or 'none'
+            defaultModelsExpandDepth: 1,
+            defaultModelExpandDepth: 1,
+            displayRequestDuration: true,
+            filter: true,
+            syntaxHighlight: {
+                activate: true,
+                theme: "monokai"
+            }
+        });
+        window.ui = ui;
     }
 </script>
 </body>
