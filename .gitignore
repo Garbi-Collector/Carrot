@@ -45,3 +45,4 @@ build/
 ### Application ###
 application-local.properties
 application-prod.properties
+data/chatapp.db
