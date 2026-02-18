@@ -18,39 +18,63 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Autenticación", description = "Endpoints para registro y login de usuarios")
+@Tag(name = "Autenticación", description = "Endpoints para registro, login y verificación de usuarios")
 public class AuthController {
 
     private final UserService userService;
 
     /**
-     * Registra un nuevo usuario.
+     * Registra un nuevo usuario y envía email de verificación.
      */
     @PostMapping("/register")
-    @Operation(summary = "Registrar usuario", description = "Registra un nuevo usuario en el sistema")
+    @Operation(summary = "Registrar usuario",
+            description = "Registra un nuevo usuario y envía email de verificación")
     public ResponseEntity<ApiResponseDTO<AuthResponseDTO>> register(
             @Valid @RequestBody UserRegistrationDTO registrationDTO) {
-
         log.info("Request de registro recibido para username: {}", registrationDTO.getUsername());
-
         AuthResponseDTO response = userService.register(registrationDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponseDTO.success(response, "Usuario registrado exitosamente"));
+                .body(ApiResponseDTO.success(response,
+                        "Usuario registrado. Por favor verifica tu email para activar tu cuenta."));
     }
 
     /**
-     * Inicia sesión de un usuario.
+     * Verifica el email del usuario mediante el token.
+     */
+    @GetMapping("/verify")
+    @Operation(summary = "Verificar email",
+            description = "Verifica el email del usuario usando el token enviado por correo")
+    public ResponseEntity<ApiResponseDTO<Void>> verifyEmail(@RequestParam("token") String token) {
+        log.info("Request de verificación de email recibido");
+        userService.verifyEmail(token);
+        return ResponseEntity.ok(
+                ApiResponseDTO.success(null, "Email verificado exitosamente. Ya puedes iniciar sesión."));
+    }
+
+    /**
+     * Reenvía el email de verificación.
+     */
+    @PostMapping("/resend-verification")
+    @Operation(summary = "Reenviar email de verificación",
+            description = "Reenvía el email de verificación a un usuario no verificado")
+    public ResponseEntity<ApiResponseDTO<Void>> resendVerificationEmail(
+            @RequestParam("email") String email) {
+        log.info("Request de reenvío de verificación para: {}", email);
+        userService.resendVerificationEmail(email);
+        return ResponseEntity.ok(
+                ApiResponseDTO.success(null, "Email de verificación reenviado."));
+    }
+
+    /**
+     * Inicia sesión de un usuario (solo si el email está verificado).
      */
     @PostMapping("/login")
-    @Operation(summary = "Iniciar sesión", description = "Autentica un usuario y retorna un token JWT")
+    @Operation(summary = "Iniciar sesión",
+            description = "Autentica un usuario verificado y retorna un token JWT")
     public ResponseEntity<ApiResponseDTO<AuthResponseDTO>> login(
             @Valid @RequestBody UserLoginDTO loginDTO) {
-
         log.info("Request de login recibido para: {}", loginDTO.getUsernameOrEmail());
-
         AuthResponseDTO response = userService.login(loginDTO);
-
         return ResponseEntity.ok(ApiResponseDTO.success(response, "Login exitoso"));
     }
 

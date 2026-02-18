@@ -136,6 +136,19 @@ public class User {
     private LocalDateTime updatedAt;
 
     /**
+     * Indica si el email del usuario ha sido verificado.
+     */
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean emailVerified = false;
+
+    /**
+     * Token único para verificación de email.
+     */
+    @Column(unique = true)
+    private String verificationToken;
+
+    /**
      * Fecha y hora de la última vez que el usuario estuvo en línea.
      * <p>
      * Se actualiza cuando el usuario cambia a estado {@link UserStatus#OFFLINE}.

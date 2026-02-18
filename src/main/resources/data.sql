@@ -2,16 +2,16 @@
 -- Inserta usuarios de prueba con contraseñas hasheadas (BCrypt)
 
 -- Contraseña para todos los usuarios de prueba: "password123"
--- Hash BCrypt: $2a$10$rFXKEw7P/eVVXQRQJQqxEO8Z8N8vXQXQJQqxEO8Z8N8vXQXQJQqxEO
+-- Hash BCrypt: $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
 
--- Insertar usuarios de prueba
-INSERT INTO users (username, email, password, full_name, avatar_url, status, enabled, created_at, updated_at)
+-- Insertar usuarios de prueba (TODOS VERIFICADOS para testing)
+INSERT INTO users (username, email, password, full_name, avatar_url, status, enabled, email_verified, verification_token, created_at, updated_at)
 VALUES
-    ('alice', 'alice@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Alice Johnson', 'https://i.pravatar.cc/150?img=1', 'OFFLINE', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('bob', 'bob@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Bob Smith', 'https://i.pravatar.cc/150?img=2', 'OFFLINE', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('charlie', 'charlie@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Charlie Brown', 'https://i.pravatar.cc/150?img=3', 'OFFLINE', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('diana', 'diana@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Diana Prince', 'https://i.pravatar.cc/150?img=4', 'OFFLINE', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('admin', 'admin@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Admin User', 'https://i.pravatar.cc/150?img=5', 'OFFLINE', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    ('alice', 'alice@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Alice Johnson', 'https://i.pravatar.cc/150?img=1', 'OFFLINE', true, true, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('bob', 'bob@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Bob Smith', 'https://i.pravatar.cc/150?img=2', 'OFFLINE', true, true, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('charlie', 'charlie@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Charlie Brown', 'https://i.pravatar.cc/150?img=3', 'OFFLINE', true, true, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('diana', 'diana@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Diana Prince', 'https://i.pravatar.cc/150?img=4', 'OFFLINE', true, true, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('admin', 'admin@chatapp.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Admin User', 'https://i.pravatar.cc/150?img=5', 'OFFLINE', true, true, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insertar sala de chat grupal de ejemplo
 INSERT INTO chat_rooms (name, type, description, image_url, created_by_user_id, created_at, updated_at)

@@ -182,9 +182,9 @@ public class GlobalExceptionHandler {
     /**
      * Maneja excepciones genéricas de la aplicación.
      */
-    @ExceptionHandler(ChatAppException.class)
+    @ExceptionHandler(CarrotException.class)
     public ResponseEntity<ErrorResponseDTO> handleChatAppException(
-            ChatAppException ex,
+            CarrotException ex,
             WebRequest request) {
 
         ErrorResponseDTO error = ErrorResponseDTO.builder()
@@ -217,4 +217,56 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    /**
+     * Maneja excepciones de token de verificación inválido.
+     */
+    @ExceptionHandler(InvalidVerificationTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidVerificationTokenException(
+            InvalidVerificationTokenException ex,
+            WebRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Maneja excepciones de email no verificado.
+     */
+    @ExceptionHandler(EmailNotVerifiedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEmailNotVerifiedException(
+            EmailNotVerifiedException ex,
+            WebRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .status(HttpStatus.FORBIDDEN.value())
+                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    /**
+     * Maneja excepciones de email ya verificado.
+     */
+    @ExceptionHandler(EmailAlreadyVerifiedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEmailAlreadyVerifiedException(
+            EmailAlreadyVerifiedException ex,
+            WebRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 }

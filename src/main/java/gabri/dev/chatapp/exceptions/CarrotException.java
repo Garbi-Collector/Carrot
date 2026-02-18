@@ -3,13 +3,13 @@ package gabri.dev.chatapp.exceptions;
 /**
  * Excepción base para todas las excepciones de la aplicación.
  */
-public class ChatAppException extends RuntimeException {
+public class CarrotException extends RuntimeException {
 
-    public ChatAppException(String message) {
+    public CarrotException(String message) {
         super(message);
     }
 
-    public ChatAppException(String message, Throwable cause) {
+    public CarrotException(String message, Throwable cause) {
         super(message, cause);
     }
 }

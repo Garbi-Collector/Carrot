@@ -2,8 +2,10 @@ package gabri.dev.chatapp.services;
 
 import gabri.dev.chatapp.dtos.*;
 import gabri.dev.chatapp.entities.User;
+import gabri.dev.chatapp.entities.VerificationToken;
 import gabri.dev.chatapp.exceptions.*;
 import gabri.dev.chatapp.repositories.UserRepository;
+import gabri.dev.chatapp.repositories.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,29 +20,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * Servicio para gestionar usuarios.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-
     @Qualifier("mergerMapper")
     private final ModelMapper mergerMapper;
-
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
+    private final EmailService emailService;
 
     /**
-     * Registra un nuevo usuario.
+     * Registra un nuevo usuario y envía email de verificación.
      */
     @Transactional
     public AuthResponseDTO register(UserRegistrationDTO registrationDTO) {
@@ -56,37 +56,131 @@ public class UserService {
             throw new UserAlreadyExistsException("email", registrationDTO.getEmail());
         }
 
-        // Crear el usuario
+        // Crear el usuario (SIN VERIFICAR y DESHABILITADO)
         User user = User.builder()
                 .username(registrationDTO.getUsername())
                 .email(registrationDTO.getEmail())
                 .password(passwordEncoder.encode(registrationDTO.getPassword()))
                 .fullName(registrationDTO.getFullName())
                 .status(User.UserStatus.OFFLINE)
-                .enabled(true)
+                .enabled(false)  // Deshabilitado hasta verificar email
+                .emailVerified(false)
                 .build();
 
         User savedUser = userRepository.save(user);
-        log.info("Usuario registrado exitosamente: {}", savedUser.getUsername());
 
-        // Generar token JWT
-        var userDetails = userDetailsService.loadUserByUsername(savedUser.getUsername());
-        String token = jwtService.generateToken(userDetails);
+        // Crear token de verificación
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = VerificationToken.builder()
+                .token(token)
+                .user(savedUser)
+                .createdAt(LocalDateTime.now())
+                .used(false)
+                .build();
 
+        verificationTokenRepository.save(verificationToken);
+
+        // Enviar email de verificación
+        emailService.sendVerificationEmail(
+                savedUser.getEmail(),
+                savedUser.getUsername(),
+                token
+        );
+
+        log.info("Usuario registrado (pendiente verificación): {}", savedUser.getUsername());
+
+        // NO generar token JWT aquí, usuario debe verificar email primero
         UserDTO userDTO = modelMapper.map(savedUser, UserDTO.class);
 
         return AuthResponseDTO.builder()
-                .token(token)
+                .token(null)  // No hay token hasta verificar
                 .user(userDTO)
                 .build();
     }
 
     /**
+     * Verifica el email del usuario con el token.
+     */
+    @Transactional
+    public void verifyEmail(String token) {
+        log.info("Verificando token: {}", token);
+
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new InvalidVerificationTokenException("Token de verificación inválido"));
+
+        if (verificationToken.getUsed()) {
+            throw new InvalidVerificationTokenException("Este token ya fue utilizado");
+        }
+
+        User user = verificationToken.getUser();
+
+        // Activar usuario
+        user.setEmailVerified(true);
+        user.setEnabled(true);
+        userRepository.save(user);
+
+        // Marcar token como usado
+        verificationToken.setUsed(true);
+        verificationTokenRepository.save(verificationToken);
+
+        // Enviar email de bienvenida
+        emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
+
+        log.info("Email verificado exitosamente para usuario: {}", user.getUsername());
+    }
+
+    /**
+     * Reenvía el email de verificación.
+     */
+    @Transactional
+    public void resendVerificationEmail(String email) {
+        log.info("Reenviando email de verificación a: {}", email);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", "email", email));
+
+        if (user.getEmailVerified()) {
+            throw new EmailAlreadyVerifiedException("Este email ya está verificado");
+        }
+
+        // Eliminar token anterior si existe
+        verificationTokenRepository.findByUser(user)
+                .ifPresent(verificationTokenRepository::delete);
+
+        // Crear nuevo token
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = VerificationToken.builder()
+                .token(token)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .used(false)
+                .build();
+
+        verificationTokenRepository.save(verificationToken);
+
+        // Reenviar email
+        emailService.sendVerificationEmail(user.getEmail(), user.getUsername(), token);
+
+        log.info("Email de verificación reenviado a: {}", email);
+    }
+
+    /**
      * Autentica un usuario y genera un token.
+     * SOLO permite login si el email está verificado.
      */
     @Transactional
     public AuthResponseDTO login(UserLoginDTO loginDTO) {
         log.info("Intento de login: {}", loginDTO.getUsernameOrEmail());
+
+        // Buscar usuario primero
+        User user = userRepository.findByUsername(loginDTO.getUsernameOrEmail())
+                .or(() -> userRepository.findByEmail(loginDTO.getUsernameOrEmail()))
+                .orElseThrow(InvalidCredentialsException::new);
+
+        // Verificar si el email está verificado
+        if (!user.getEmailVerified()) {
+            throw new EmailNotVerifiedException("Debes verificar tu email antes de iniciar sesión");
+        }
 
         // Autenticar
         try {
@@ -100,11 +194,6 @@ public class UserService {
             log.error("Login fallido para: {}", loginDTO.getUsernameOrEmail());
             throw new InvalidCredentialsException();
         }
-
-        // Buscar usuario
-        User user = userRepository.findByUsername(loginDTO.getUsernameOrEmail())
-                .or(() -> userRepository.findByEmail(loginDTO.getUsernameOrEmail()))
-                .orElseThrow(InvalidCredentialsException::new);
 
         // Actualizar estado a ONLINE
         user.setStatus(User.UserStatus.ONLINE);
