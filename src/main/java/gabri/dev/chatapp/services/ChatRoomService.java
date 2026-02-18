@@ -121,6 +121,7 @@ public class ChatRoomService {
     /**
      * Obtiene todas las salas de chat del usuario actual.
      */
+    @Transactional(readOnly = true)
     public List<ChatRoomDTO> getCurrentUserChatRooms() {
         User currentUser = userService.getCurrentUser();
         List<ChatRoom> chatRooms = chatRoomRepository.findByParticipantId(currentUser.getId());
@@ -133,6 +134,7 @@ public class ChatRoomService {
     /**
      * Obtiene una sala de chat por ID.
      */
+    @Transactional(readOnly = true)
     public ChatRoomDTO getChatRoomById(Long id) {
         ChatRoom chatRoom = getChatRoomEntityById(id);
         verifyUserIsParticipant(chatRoom);
@@ -309,6 +311,7 @@ public class ChatRoomService {
     /**
      * Obtiene la entidad ChatRoom por ID (uso interno).
      */
+    @Transactional(readOnly = true)
     public ChatRoom getChatRoomEntityById(Long id) {
         return chatRoomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ChatRoom", "id", id));

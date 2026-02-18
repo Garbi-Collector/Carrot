@@ -341,6 +341,14 @@ public class UserService {
     }
 
     /**
+     * Obtiene la entidad User por username (uso interno).
+     */
+    public User getUserEntityByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", "username", username));
+    }
+
+    /**
      * Obtiene la entidad User por ID (uso interno).
      */
     public User getUserEntityById(Long id) {

@@ -69,6 +69,7 @@ public class MessageService {
     /**
      * Obtiene mensajes de una sala con paginación.
      */
+    @Transactional(readOnly = true)
     public Page<MessageDTO> getMessagesByChatRoom(Long chatRoomId, int page, int size) {
         ChatRoom chatRoom = chatRoomService.getChatRoomEntityById(chatRoomId);
         User currentUser = userService.getCurrentUser();
@@ -87,6 +88,7 @@ public class MessageService {
     /**
      * Obtiene los últimos N mensajes de una sala.
      */
+    @Transactional(readOnly = true)
     public List<MessageDTO> getLastMessages(Long chatRoomId, int limit) {
         ChatRoom chatRoom = chatRoomService.getChatRoomEntityById(chatRoomId);
         User currentUser = userService.getCurrentUser();
@@ -109,9 +111,41 @@ public class MessageService {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Envía un mensaje a una sala de chat (desde WebSocket, con username explícito).
+     * Usado cuando el SecurityContext no está disponible (contexto WebSocket).
+     */
+    @Transactional
+    public MessageDTO sendMessage(MessageSendDTO sendDTO, String username) {
+        User sender = userService.getUserEntityByUsername(username);
+        ChatRoom chatRoom = chatRoomService.getChatRoomEntityById(sendDTO.getChatRoomId());
+
+        log.info("Usuario {} enviando mensaje a sala {} (via WebSocket)",
+                sender.getUsername(), chatRoom.getName());
+
+        if (!chatRoom.getParticipants().contains(sender)) {
+            throw new UserNotParticipantException(sender.getUsername(), chatRoom.getName());
+        }
+
+        Message message = Message.builder()
+                .content(sendDTO.getContent())
+                .type(sendDTO.getType())
+                .sender(sender)
+                .chatRoom(chatRoom)
+                .isEdited(false)
+                .build();
+
+        Message savedMessage = messageRepository.save(message);
+        log.info("Mensaje enviado con ID: {}", savedMessage.getId());
+
+        return mapToMessageDTO(savedMessage);
+    }
+
     /**
      * Obtiene un mensaje por ID.
      */
+    @Transactional(readOnly = true)
     public MessageDTO getMessageById(Long id) {
         Message message = getMessageEntityById(id);
         User currentUser = userService.getCurrentUser();
@@ -185,6 +219,7 @@ public class MessageService {
     /**
      * Busca mensajes por contenido en una sala.
      */
+    @Transactional(readOnly = true)
     public List<MessageDTO> searchMessages(Long chatRoomId, String query) {
         ChatRoom chatRoom = chatRoomService.getChatRoomEntityById(chatRoomId);
         User currentUser = userService.getCurrentUser();
@@ -204,6 +239,7 @@ public class MessageService {
     /**
      * Obtiene el conteo de mensajes en una sala.
      */
+    @Transactional(readOnly = true)
     public Long getMessageCount(Long chatRoomId) {
         ChatRoom chatRoom = chatRoomService.getChatRoomEntityById(chatRoomId);
         User currentUser = userService.getCurrentUser();
