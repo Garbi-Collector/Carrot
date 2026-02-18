@@ -32,6 +32,13 @@ public class WebSocketEventListener {
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+
+
+        if (headerAccessor.getSessionAttributes() == null) {
+            log.debug("SessionConnectedEvent sin sessionAttributes, ignorando.");
+            return;
+        }
+
         String username = (String) headerAccessor.getSessionAttributes().get("username");
 
         if (username != null) {

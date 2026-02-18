@@ -45,7 +45,7 @@ public class WebSocketChatController {
 
         try {
             // Guardar el mensaje en la base de datos
-            MessageDTO savedMessage = messageService.sendMessage(messageSendDTO);
+            MessageDTO savedMessage = messageService.sendMessage(messageSendDTO, principal.getName());
 
             // Crear DTO optimizado para WebSocket
             User sender = userService.getUserEntityById(savedMessage.getSender().getId());
