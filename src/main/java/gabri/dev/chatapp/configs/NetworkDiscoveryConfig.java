@@ -1,3 +1,8 @@
+/**
+ *por ahora esta comentado porque planeo buscar otra forma de hacerlo
+ *
+ *
+ *
 package gabri.dev.chatapp.configs;
 
 import com.google.zxing.BarcodeFormat;
@@ -90,3 +95,4 @@ public class NetworkDiscoveryConfig implements ApplicationRunner {
         }
     }
 }
+ */
